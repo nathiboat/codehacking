@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UsersRequest;
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -15,7 +18,8 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index');
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -25,18 +29,32 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::lists('name', 'id')->all();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param UsersRequest|Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UsersRequest $request)
     {
-        //
+        if(trim($request->password) == ''){
+
+            $input = $request->except('password');
+
+        } else{
+
+
+            $input = $request->all();
+
+            $input['password'] = bcrypt($request->password);
+
+        }
+        User::create($input);
+        return redirect('/admin/users/');
     }
 
     /**
