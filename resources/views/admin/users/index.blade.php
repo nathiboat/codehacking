@@ -1,5 +1,16 @@
 @extends('layouts.admin')
 @section('content')
+    @if(Session::has('deleted_user'))
+       <div class="row">
+           <div class="col-xs-12">
+               <div class="panel panel-danger">
+                   <div class="panel-body">
+                       <p>{{session('deleted_user')}}</p>
+                   </div>
+               </div>
+           </div>
+       </div>
+    @endif
     <h1>User</h1>
     <table class="table">
         <thead>
@@ -20,7 +31,7 @@
             <tr>
                 <td>{{$user->id}}</td>
                 <td>
-                    <img height="50" src="{{$user->photo ? $user->photo->file : 'http://placehold.it/50x50'}}" alt="" class="img-responsive img-rounded" style="width: 50px;">
+                    <img height="50" src="{{$user->photo ? $user->photo->file : 'http://placehold.it/50x50'}}" alt="" class="img-responsive img-rounded" style="width: 50px">
                 </td>
                 <td><a href="{{route('admin.users.edit',$user->id)}}">{{$user->name}}</a></td>
                 <td>{{$user->email}}</td>
